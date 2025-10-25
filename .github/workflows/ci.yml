@@ -1,4 +1,4 @@
-name: CI
+name: CI (deps-debug)
 
 on:
   push:
@@ -34,20 +34,20 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Show requirements (path + contents)
+      - name: Show repo root & requirements file
         run: |
           pwd
+          ls -la
           echo "===== requirements.txt ====="
           nl -ba requirements.txt || true
 
-      - name: Install dependencies (NO CACHE, force pins)
+      - name: Install dependencies (no cache) + force pins
         run: |
           python -m pip install --upgrade pip
-          # install from requirements, then FORCE the critical pins explicitly
           pip install --no-cache-dir -r requirements.txt
           pip install --no-cache-dir "SQLAlchemy==2.0.36" "sqlmodel==0.0.22"
 
-      - name: Assert imports
+      - name: Assert critical imports
         run: |
           python - << 'PY'
 import importlib, sys
